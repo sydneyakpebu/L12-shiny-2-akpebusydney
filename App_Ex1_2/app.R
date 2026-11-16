@@ -1,0 +1,57 @@
+#
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    https://shiny.posit.co/
+#
+
+library(shiny)
+
+ui <- page_sidebar(
+  title = "censusVis",
+  sidebar = sidebar(
+    helpText(
+      "Create demographic maps with information from the 2010 US Census."
+    ),
+    selectInput(
+      "var",
+      label = "Choose a variable to display",
+      choices = 
+        c("Percent White",
+          "Percent Black",
+          "Percent Hispanic",
+          "Percent Asian"),
+      selected = "Percent White"
+    ),
+    sliderInput(
+      "range",
+      label = "Range of interest:",
+      min = 0, 
+      max = 100, 
+      value = c(0, 100)
+    )
+  ),
+  textOutput("selected_var"),
+  textOutput("selected_range")
+)
+
+server <- function(input, output) {
+  
+  output$selected_var <- renderText({
+    paste("You have selected", input$var)
+  })
+  
+  output$selected_range <- renderText({
+    paste(
+      "You have chosen a range that goes from",
+      input$range[1],
+      "to",
+      input$range[2]
+    )
+  })
+  
+}
+
+shinyApp(ui = ui, server = server)
